@@ -1,13 +1,6 @@
-# web-python2.7-simple
+# Pandora-time
 
-Python 2.7 Sample Application
-
-# Developer Workspace
-[![Contribute](http://beta.codenvy.com/factory/resources/codenvy-contribute.svg)](http://beta.codenvy.com/f?id=c9gjtuvo566cyuxt)
-
-# Stack to use
-
-FROM [codenvy/ubuntu_python:2.7](https://hub.docker.com/r/codenvy/ubuntu_python/)
+Python 2.7 flask application for manage task and time use restful web Services.
 
 # How to run
 
