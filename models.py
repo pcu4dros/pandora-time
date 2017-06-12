@@ -21,11 +21,11 @@ class Task(Base):
     expires = Column(DateTime)
     done = Column(Boolean, nullable=False)
     uri = Column(URLType)
-        
+
 
 if __name__ == "__main__":
     from sqlalchemy import create_engine
-    from settings import DB_URI
+    from config import DB_URI
     engine = create_engine(DB_URI)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

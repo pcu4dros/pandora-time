@@ -9,10 +9,12 @@ from flask.ext.restful import Resource
 from flask.ext.restful import fields
 from flask.ext.restful import marshal_with
 from flask.ext.httpauth import HTTPBasicAuth
+from flask_restful_swagger import swagger
 
 auth = HTTPBasicAuth()
 
 task_fields = {
+        'id': fields.Integer,
         'title': fields.String,
         'description': fields.String,
         'date': fields.DateTime(dt_format='rfc822'),
@@ -34,7 +36,7 @@ def get_password(username):
     if username == 'miguel':
         return 'python'
     return None
-    
+
 @auth.error_handler
 def unauthorized():
     # return 403 instead of 401 to prevent browsers from displaying the default
@@ -42,7 +44,35 @@ def unauthorized():
     return make_response(jsonify({'message': 'Unauthorized access'}), 403)
 
 class TaskAPI(Resource):
-    decorators = [auth.login_required]
+    "Describing elephants"
+    @swagger.operation(
+        summary= "Find task by ID",
+        notes='some really good tasks',
+        nickname='getTaskById',
+        parameters=[
+            {
+              "name": "id",
+              "description": "ID of task that needs to be fetched",
+              "required": True,
+              "type": "int",
+              "paramType": "path"
+            }
+        ],
+        responseMessages=[
+            {
+              "code": 400,
+              "message": "Invalid ID supplied"
+            },
+            {
+              "code": 404,
+              "message": "Order not found"
+            },
+            {
+              "code": 405,
+              "message": "Invalid input"
+            }
+          ]
+        )
 
     @marshal_with(task_fields)
     def get(self, id):
@@ -71,9 +101,16 @@ class TaskAPI(Resource):
         session.delete(task)
         session.commit()
         return {}, 204
-        
+
 class TaskListAPI(Resource):
-    decorators = [auth.login_required]
+    "Describing elephants"
+    @swagger.operation(
+        summary= "list all tasks",
+        notes='some really good tasks',
+        nickname='listTasks',
+        parameters=[],
+        responseMessages=[]
+        )
 
     @marshal_with(task_fields)
     def get(self):
@@ -91,4 +128,4 @@ class TaskListAPI(Resource):
         done = parsed_args['done'])
         session.add(task)
         session.commit()
-        return todo, 201
+        return task, 201
